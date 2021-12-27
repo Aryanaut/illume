@@ -1,0 +1,14 @@
+  ______________________________
+ / \                             \.
+|   |       Welcome, player...   |.
+ \_ |   to Illume                |.
+    |                            |.
+    |   Enter the forest,        |.
+    |    find the five keys,     |.
+    |   solve the final puzzle,  |.
+    |    defeat the keymaster,   |.
+    |   and collect the treasure |.
+    |                            |.
+    |   _________________________|___
+    |  /                            /.
+    \_/dc__________________________/.
