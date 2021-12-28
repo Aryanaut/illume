@@ -1,7 +1,4 @@
-import os
+from game_levels.levels import il_levels
 
-titleFile = "txt_files/template_title.txt"
-title = open(titleFile, 'r').read()
-
-# opening title
-print(title)
+il_levels = il_levels()
+il_levels.show_title()
