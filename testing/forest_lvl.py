@@ -5,6 +5,8 @@ itemList
 directions to go
 available commands
 
+for items, it's best to define each item as a function. the function is called whenever the item is used. 
+
 '''
 
 
