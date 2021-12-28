@@ -1,3 +1,13 @@
+'''
+Each level has the following:
+
+itemList
+directions to go
+available commands
+
+'''
+
+
 playerInv = {'items':[], 'keys':0}
 goVar = ['Go', 'go', 'GO']
 useVar = ['Use', 'use', 'USE']
