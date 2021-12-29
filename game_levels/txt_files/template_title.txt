@@ -14,10 +14,6 @@
     \_/dc__________________________/.
 
 Type in the action you want to perform and press "Enter" to execute. 
-Commands:
-
-use [itemname]
-go [direction]
 
 Level specific commands will be given within the levels themselves. 
 As of today [28/12/2021] only one level is available to experiment with. Type in "go north" to access. 
