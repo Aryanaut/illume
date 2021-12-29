@@ -8,3 +8,7 @@ class il_levels:
         title = open(titleFile, 'r').read()
         # opening title
         print(title)
+
+    def end_screen(self):
+        print("Programing terminating...")
+        print("Thank you for playing!")
