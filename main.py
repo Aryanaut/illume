@@ -220,6 +220,7 @@ while game_ended == False:
                                 if playerInput == 'yes':
                                     print("\n Trickster: Game's simple. Rock beats Scissors, Scissors cuts Paper, Paper covers rock. Winner takes key. \n")
                                     print("Enter your choice (Rock, Paper or Scissors)")
+                                    print("game is still being built here.")
 
                                     continue
                                 
