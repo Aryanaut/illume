@@ -9,7 +9,7 @@ print("You wake up in a forest with five paths in five directions - North, South
 print("\n Commands: \n use [itemname] \n go [direction] \n Type in 'look around' to search the area \n Type in 'END GAME' to end the game. \n")
 
 playerInput = ""
-gateReq = 1
+gateReq = 3
 currentLevel = 'forest'
 
 enteredForest = True
@@ -23,12 +23,16 @@ enteredNorth = False
 Format for items:
 items = {level_name:{itemname:[list of commands for the item]}}
 '''
-items = {'forest':{'scroll': ['use', 'drop', 'pick up'], 'gate': ['open']}, 
+items = {'forest':{'scroll': ['use', 'drop', 'pickup'], 'gate': ['open']}, 
         'east':{'trickster':['talk', 'play']}}
 
 commands  = {'forest':['look', 'go', 'pickup', 'drop', 'use', 'open'],
-            'east':['look', 'go', 'pickup', 'drop', 'give']}
-paths = {'forest':['north', 'south', 'east', 'west', 'down'], 'east':['west']}
+            'east':['look', 'go', 'pickup', 'drop', 'give'],
+            'down':['go', 'look'],
+            'south':['look', 'go', 'talk', 'help']}
+
+paths = {'forest':['north', 'south', 'east', 'west', 'down'], 'east':['west'],
+        'west':['east'], 'down':['up'], 'south':['north'], 'north':['south']}
 
 errorMsg = {'directionError':'You cannot go that way in this room', 
             'unrecognizedCommand':'The game does not recognize this command.',
@@ -36,6 +40,7 @@ errorMsg = {'directionError':'You cannot go that way in this room',
             'commandLVLunavailable':'This action cannot be performed in this level.'}
 
 debugging_commands = {'debugadd':'debugadd [itemname]', 'debugremove':'debugremove [itemname]'}
+currentLevel = 'forest'
 
 def msgs(item, msgType):
     switcher = {
@@ -58,14 +63,16 @@ def noWinRPS(playerInput):
 
 finalItemList=['rock', 'paper', 'scissors', 'G_Key']
 def south():
+    global currentLevel
+
     print('{c}: Welcome to the our humble village of meridiem-occidens!\n{c}: I have a key which I am willing to trade for services rendered.\n{c}: Our villagers need some help calculating the worth of their produce. Are you willing to help us?'.format(c='Cheifton'))
-    while True:
+    while currentLevel == 'south':
         ans=input('>>> ').lower()
         if ans=='yes':
             print('{c}: Splendid!\n{c}: Lets go meet our first villager, {v1}.'.format(c='Cheifton', v1='Sal'))
             print('{v1}: I have 200 carrots which each go for 10p.\n{v1}: I need to plant some potatoes, and each of them goes for 15p.\n{v1}: I need to make at least 5000p.\n{v1}: At least how many potatoes should I plant?'.format(v1='Sal'))
             while True:
-                ans1=input('>>> ')
+                ans1=input('>>> ').lower()
                 if ans1=='200':
                     print('{v1}: Thank you so much!'.format(v1='Sal'))
                     break
@@ -75,7 +82,7 @@ def south():
             print('You go {d} and meet {v2}.'.format(v2='Will', d='west'))
             print('{v2}: I was approached by merchant who offered me 3000p for 150 Carrots and 5 cattle.\n{v2}: Each carrot is worth 10p and each of my cattle is worth 250p.\n{v2}: Am I making a profit, loss, or am I breaking even?'.format(v2='Will'))
             while True:
-                ans1=input('>>> ')
+                ans1=input('>>> ').lower()
                 if 'profit' in ans1:
                     print('Will: Thank you so much!')
                     break
@@ -83,9 +90,37 @@ def south():
                     print('Are you sure about that? Try again.')
             print('{c}: Thank you for all your help! I do not actually have either of the keys. However please take this.\nA Golden Key has been added to your inventory.\n{c}: Go to the forest and then go down, when you get there give the merchant the items you have as well as the Golden Key.\n{c}: In return, he will give you the final 2 keys, and you can make your way to freedom.'.format(c='Cheifton'))
             playerInv['items'].append('G_Key')
-            break
+            continue
+        
         else:
-            print('Are you sure? Try again.')
+            print('Alright, see you later then.')
+
+        if len(ans.split()) > 1:
+            prefix = ans.split()[0]
+            suffix = ans.split()[1]
+        else:
+            prefix = ans.split()
+
+        if prefix in commands['south']:
+            if prefix == 'go':
+                if suffix in paths['south']:
+                    currentLevel = 'forest'
+                    continue
+
+                else:
+                    print(errorMsg['directionError'])
+
+            if prefix == 'help':
+                print("Available commands: \n")
+                for command in commands['south']:
+                    print(command)
+
+            if prefix == 'talk':
+                print('{c}: Welcome to the our humble village of meridiem-occidens!\n{c}: I have a key which I am willing to trade for services rendered.\n{c}: Our villagers need some help calculating the worth of their produce. Are you willing to help us?'.format(c='Cheifton'))
+                continue
+
+        else:
+            print(errorMsg['commandLVLunavailable'])
 
 def west():
     print('{c}: Welcome to the our humble village of meridiem-occidens!\n{c}: I have a key which I am willing to trade for services rendered.\n{c}: Our villagers need some help calculating the worth of their produce. Are you willing to help us?'.format(c='Cheifton'))
@@ -119,12 +154,34 @@ def west():
             print('Are you sure? Try again.')
 
 def down():
+    global currentLevel
     print('{m}: Welcome to the underground market, I am the merchant.\n{m}: The Cheifton says you have items you would like to trade in exchange for the south and the west keys.\n{m}: Alright, let me examine the items.'.format(m='The Merchant'))
+
     if playerInv['items']==finalItemList:
         print('\nThe Merchant: Everything seems to be in order, here are the keys for your items.\n')
         playerInv['keys']+=2
     else:
         print('\nThe Merchant: You do not have the neccesary items.\n')
+
+    playerInput = input(">>> ").lower()
+
+    if len(playerInput.split()) > 1:
+        prefix = playerInput.split()[0]
+        suffix = playerInput.split()[1]
+    else:
+        prefix = playerInput.split()
+
+    if prefix in commands['down']:
+        if prefix == 'go':
+            if suffix in paths['down']:
+                currentLevel = 'forest'
+
+            else:
+                print(errorMsg['directionError'])
+
+    else:
+        print(errorMsg['commandLVLunavailable'])
+
 
 
 game_ended = False
@@ -334,12 +391,15 @@ while game_ended == False:
 
         if currentLevel == 'south':
             south()
+            continue
 
         if currentLevel == 'west':
             west()
+            continue
 
         if currentLevel == 'down':
             down()
+            continue
             
     else:
         print("Program terminating...")
