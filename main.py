@@ -2,6 +2,7 @@ from game_levels.titles import il_levels
 
 il_levels = il_levels()
 il_levels.show_title()
+import time
 
 # global variables 
 playerInv = {'items':[], 'keys':0}
@@ -62,65 +63,6 @@ def noWinRPS(playerInput):
     return response
 
 finalItemList=['rock', 'paper', 'scissors', 'G_Key']
-def south():
-    global currentLevel
-
-    print('{c}: Welcome to the our humble village of meridiem-occidens!\n{c}: I have a key which I am willing to trade for services rendered.\n{c}: Our villagers need some help calculating the worth of their produce. Are you willing to help us?'.format(c='Cheifton'))
-    while currentLevel == 'south':
-        ans=input('>>> ').lower()
-        if ans=='yes':
-            print('{c}: Splendid!\n{c}: Lets go meet our first villager, {v1}.'.format(c='Cheifton', v1='Sal'))
-            print('{v1}: I have 200 carrots which each go for 10p.\n{v1}: I need to plant some potatoes, and each of them goes for 15p.\n{v1}: I need to make at least 5000p.\n{v1}: At least how many potatoes should I plant?'.format(v1='Sal'))
-            while True:
-                ans1=input('>>> ').lower()
-                if ans1=='200':
-                    print('{v1}: Thank you so much!'.format(v1='Sal'))
-                    break
-                else:
-                    print('Are you sure about that? Try again.')
-            print('{c}: Thank you for your help with {v1}, now I just need some help with another villager, {v2}.\n{c}: He lives in the {d}, so you\'ll need to travel there.\n{c}: I can safely say that you will receive both the keys, for both the south, as well as the west if you do this.'.format(c='Cheifton', v1='Sal', v2='Will', d='West'))
-            print('You go {d} and meet {v2}.'.format(v2='Will', d='west'))
-            print('{v2}: I was approached by merchant who offered me 3000p for 150 Carrots and 5 cattle.\n{v2}: Each carrot is worth 10p and each of my cattle is worth 250p.\n{v2}: Am I making a profit, loss, or am I breaking even?'.format(v2='Will'))
-            while True:
-                ans1=input('>>> ').lower()
-                if 'profit' in ans1:
-                    print('Will: Thank you so much!')
-                    break
-                else:
-                    print('Are you sure about that? Try again.')
-            print('{c}: Thank you for all your help! I do not actually have either of the keys. However please take this.\nA Golden Key has been added to your inventory.\n{c}: Go to the forest and then go down, when you get there give the merchant the items you have as well as the Golden Key.\n{c}: In return, he will give you the final 2 keys, and you can make your way to freedom.'.format(c='Cheifton'))
-            playerInv['items'].append('G_Key')
-            continue
-        
-        else:
-            print('Alright, see you later then.')
-
-        if len(ans.split()) > 1:
-            prefix = ans.split()[0]
-            suffix = ans.split()[1]
-        else:
-            prefix = ans.split()
-
-        if prefix in commands['south']:
-            if prefix == 'go':
-                if suffix in paths['south']:
-                    currentLevel = 'forest'
-                    continue
-
-                else:
-                    print(errorMsg['directionError'])
-
-            if prefix == 'help':
-                print("Available commands: \n")
-                for command in commands['south']:
-                    print(command)
-
-            if prefix == 'talk':
-                print('{c}: Welcome to the our humble village of meridiem-occidens!\n{c}: I have a key which I am willing to trade for services rendered.\n{c}: Our villagers need some help calculating the worth of their produce. Are you willing to help us?'.format(c='Cheifton'))
-                continue
-
-        else:
-            print(errorMsg['commandLVLunavailable'])
 
 def west():
     print('{c}: Welcome to the our humble village of meridiem-occidens!\n{c}: I have a key which I am willing to trade for services rendered.\n{c}: Our villagers need some help calculating the worth of their produce. Are you willing to help us?'.format(c='Cheifton'))
@@ -153,35 +95,6 @@ def west():
         else:
             print('Are you sure? Try again.')
 
-def down():
-    global currentLevel
-    print('{m}: Welcome to the underground market, I am the merchant.\n{m}: The Cheifton says you have items you would like to trade in exchange for the south and the west keys.\n{m}: Alright, let me examine the items.'.format(m='The Merchant'))
-
-    if playerInv['items']==finalItemList:
-        print('\nThe Merchant: Everything seems to be in order, here are the keys for your items.\n')
-        playerInv['keys']+=2
-    else:
-        print('\nThe Merchant: You do not have the neccesary items.\n')
-
-    playerInput = input(">>> ").lower()
-
-    if len(playerInput.split()) > 1:
-        prefix = playerInput.split()[0]
-        suffix = playerInput.split()[1]
-    else:
-        prefix = playerInput.split()
-
-    if prefix in commands['down']:
-        if prefix == 'go':
-            if suffix in paths['down']:
-                currentLevel = 'forest'
-
-            else:
-                print(errorMsg['directionError'])
-
-    else:
-        print(errorMsg['commandLVLunavailable'])
-
 
 
 game_ended = False
@@ -195,7 +108,7 @@ while game_ended == False:
             prefix = playerInput.split()[0]
             suffix = playerInput.split()[1]
         else:
-            prefix = playerInput.split()
+            prefix = playerInput.split()[0]
             
         if playerInput == 'open inventory':
             print("\n Your Inventory: \n")
@@ -240,19 +153,23 @@ while game_ended == False:
                 if prefix == 'go':
                     if suffix in paths['forest']:
                         if suffix == 'north':
-                            print("unavailable")
+                            print("The Path is blocked by a gate.")
                         if suffix == 'south':
                             currentLevel = 'south'
+                            continue
 
                         if suffix == 'west':
                             currentLevel = 'west'
+                            continue
 
                         if suffix == 'down':
                             currentLevel = 'down'
+                            continue
 
                         if suffix == 'east':
                             currentLevel = 'east'
                             enteredEast = True
+                            continue
                     
                     else:
                         print(errorMsg['directionError'])
@@ -265,7 +182,7 @@ while game_ended == False:
                             msgs(suffix, 'usedItem')
                             if prefix in level_items[suffix]:
                                 if suffix == 'scroll':
-                                    print("The scroll reads: \n Find the five keys to open the gate \n and make your way home.")
+                                    print("The scroll reads: \n Find the five keys to open the gate \n and make your way home.\n")
                             else:
                                 print("This command is not available for this item")
                         else:
@@ -296,8 +213,11 @@ while game_ended == False:
                 if playerInput == 'look around':
                     print("\n You see: ")
                     for item in level_items.keys():
-                        print('- A', item.title())
-                    print()
+                        print('A', item.title())
+                    print("\nYou also see five paths: \n")
+                    for item in paths['forest']:
+                        print(item.title())
+                    print("Use the go (usage: go [direction]) command to travel these paths.\n")
                 
                 if prefix == 'open':
                     if suffix == 'gate':
@@ -331,12 +251,12 @@ while game_ended == False:
                     print(errorMsg['directionError'])
             
             if playerInput == 'talk':
-                print("\n To? \n - The old hooded man [type in 'trickster'] \n Type in 'Exit' to cancel action." )
+                print("\n To? \n - The old hooded man [type in 'trickster'] \n Type in 'Exit' to cancel action.\n" )
                 playerInput = input(">>> ").lower()
 
                 if playerInput == 'trickster':
                     print("\n Trickster: Greetings wanderer!")
-                    print("\n Choose your response: \n [1] Say hello \n [2] Look around")
+                    print("\n Choose your response: \n [1] Say hello \n [2] Look around\n")
                     playerInput = input(">>> ").lower()
 
                     if playerInput == '1':
@@ -356,7 +276,7 @@ while game_ended == False:
                                     continue
                                 
                                 if playerInput == 'no':
-                                    print("\n Trickster: Later, then.")
+                                    print("\n Trickster: Later, then.\n")
                                     continue
 
                                 else:
@@ -371,7 +291,7 @@ while game_ended == False:
                             continue
 
                     if playerInput == '2':
-                        print("\n From the old man's cloak, a golden key dangles. \n")
+                        print("\n From the old man's cloak, a key dangles. \n")
                         continue
 
                 if playerInput == 'exit':
@@ -386,19 +306,116 @@ while game_ended == False:
                 continue
 
             if playerInput == 'look around':
-                print("You see an old hooded man seated next to a desk. On the desk are two rocks, two papers and a pair of scissors. \n")
+                print("\nYou see an old hooded man seated next to a desk. On the desk are two rocks, two papers and a pair of scissors. \n")
                 continue
 
         if currentLevel == 'south':
-            south()
-            continue
+
+            print("\nYou have now entered the south. You see a village and a gathering of people around the farmland.\n")
+
+            if prefix in commands['south']:
+                if prefix == 'go':
+                    if suffix in paths['south']:
+                        currentLevel = 'forest'
+                        continue
+
+                    else:
+                        print(errorMsg['directionError'])
+
+                if prefix == 'help':
+                    print("Available commands: \n")
+                    for command in commands['south']:
+                        print(command.title())
+                    print()
+
+                if prefix == 'talk':
+                    print('{c}: Welcome to the our humble village of meridiem-occidens!\n{c}: I have a key which I am willing to trade for services rendered.\n{c}: Our villagers need some help calculating the worth of their produce. Are you willing to help us?'.format(c='Cheifton'))
+
+                    while currentLevel == 'south':
+                        ans=input('>>> ').lower()
+                        if ans=='yes':
+                            print('{c}: Splendid!\n{c}: Lets go meet our first villager, {v1}.'.format(c='Cheifton', v1='Sal'))
+                            print('{v1}: I have 200 carrots which each go for 10p.\n{v1}: I need to plant some potatoes, and each of them goes for 15p.\n{v1}: I need to make at least 5000p.\n{v1}: At least how many potatoes should I plant?'.format(v1='Sal'))
+                            while True:
+                                ans1=input('>>> ').lower()
+                                if ans1=='200':
+                                    print('{v1}: Thank you so much!'.format(v1='Sal'))
+                                    break
+                                else:
+                                    print('Are you sure about that? Try again.')
+                            print('{c}: Thank you for your help with {v1}, now I just need some help with another villager, {v2}.\n{c}: He lives in the {d}, so you\'ll need to travel there.\n{c}: I can safely say that you will receive both the keys, for both the south, as well as the west if you do this.'.format(c='Cheifton', v1='Sal', v2='Will', d='West'))
+                            time.sleep(5)
+                            print('Go {d} and meet {v2}.'.format(v2='Will', d='west'))
+                            print("\nPlayer: Thank you.\n")
+                            print("A farmer approaches.")
+                            time.sleep(3)
+                            print('{v2}: I was approached by merchant who offered me 3000p for 150 Carrots and 5 cattle.\n'.format(v2='Will'))
+                            print("{v2}: Each carrot is worth 10p and each of my cattle is worth 250p.\n".format(v2="Will"))
+                            print("{v2}: Am I making a profit, loss, or am I breaking even?\n".format(v2="Will"))
+                            print("")
+                            while True:
+                                ans1=input('>>> ').lower()
+                                if 'profit' in ans1:
+                                    print('Will: Thank you so much!')
+                                    break
+                                else:
+                                    print('Are you sure about that? Try again.')
+                            print('{c}: Thank you for all your help! However please take this.\n'.format(c='Cheifton'))
+                            time.sleep(1.5)
+                            playerInv['items'].append('g_key')
+                            print("\n A golden key has been added to your inventory. \n Use the phrase 'G_key' to access \n")
+
+                            print("{c}: I do not actually have either of the keys.".format(c="Chiefton"))
+                            time.sleep(1.5)
+                            print("{c}: A Golden Key has been added to your inventory.".format(c="Chiefton"))
+                            time.sleep(1.5)
+                            print("{c}: Go to the forest and then go down, when you get there give the merchant the items you have as well as the Golden Key.".format(c="Chiefton"))
+                            time.sleep(2.5)
+                            print("{c}: In return, he will give you the final 2 keys, and you can make your way to freedom.".format(c="Chiefton"))
+                            
+                            continue
+                        
+                        elif ans == 'no':
+                            print('Alright, see you later then.')
+                            break
+
+                        else:
+                            print(errorMsg['unrecognizedCommand'])
+
+            else:
+                print(errorMsg['commandLVLunavailable'])
 
         if currentLevel == 'west':
             west()
             continue
 
         if currentLevel == 'down':
-            down()
+            print('{m}: Welcome to the underground market, I am the merchant.\n{m}: The Cheifton says you have items you would like to trade in exchange for the south and the west keys.\n{m}: Alright, let me examine the items.'.format(m='The Merchant'))
+
+            if playerInv['items']==finalItemList:
+                print('\nThe Merchant: Everything seems to be in order, here are the keys for your items.\n')
+                playerInv['keys']+=2
+            else:
+                print('\nThe Merchant: You do not have the neccesary items.\n')
+
+            playerInput = input(">>> ").lower()
+
+            if len(playerInput.split()) > 1:
+                prefix = playerInput.split()[0]
+                suffix = playerInput.split()[1]
+            else:
+                prefix = playerInput.split()
+
+            if prefix in commands['down']:
+                if prefix == 'go':
+                    if suffix in paths['down']:
+                        currentLevel = 'forest'
+
+                    else:
+                        print(errorMsg['directionError'])
+
+            else:
+                print(errorMsg['commandLVLunavailable'])
             continue
             
     else:
