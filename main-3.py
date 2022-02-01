@@ -54,7 +54,7 @@ def msgs(item, msgType):
 
 rps = ['rock', 'paper', 'scissors']
 rpsWin = {'rock':'paper', 'paper':'scissors', 'scissors':'rock'}
-finalItemList=['rock', 'paper', 'scissors', 'G_Key']
+finalItemList=['rock', 'paper', 'scissors', 'g_key']
 
 game_ended = False
 while game_ended == False:
@@ -180,7 +180,7 @@ while game_ended == False:
                 
                 if prefix == 'open':
                     if suffix == 'gate':
-                        if playerInv['keys'] != 1:
+                        if playerInv['keys'] != gateReq:
                             print("The gate requires", gateReq, "keys to open.")
                         else:
                             print("The gate opens, and you walk through. You've made it home. Congratulations, player.")
@@ -400,8 +400,6 @@ while game_ended == False:
                             print('{c}: Thank you for all your help! However please take this.\n'.format(c='Cheifton'))
                             time.sleep(1.5)
                             playerInv['items'].append('g_key')
-                            print("\n A golden key has been added to your inventory. \n Use the phrase 'G_key' to access \n")
-
                             print("{c}: I do not actually have either of the keys.".format(c="Chiefton"))
                             time.sleep(1.5)
                             print("{c}: A Golden Key has been added to your inventory.".format(c="Chiefton"))
@@ -426,11 +424,19 @@ while game_ended == False:
 #down code
         if currentLevel == 'down':
             print('{m}: Welcome to the underground market, I am the merchant.\n{m}: The Cheifton says you have items you would like to trade in exchange for the south and the west keys.\n{m}: Alright, let me examine the items.'.format(m='The Merchant'))
-
-            if playerInv['items']==finalItemList:
+            boolean=False
+            for i in finalItemList:
+                if i in playerInv['items']:
+                    boolean=True
+                elif boolean==False:
+                    break
+                else:
+                    boolean=False
+            if boolean==True:
                 print('\nThe Merchant: Everything seems to be in order, here are the keys for your items.\n')
                 playerInv['keys']+=2
                 print('The Merchant: Now go up, and return to the forest. Then go north and complete the game!')
+                playerInv['items'].clear()
             else:
                 print('\nThe Merchant: You do not have the neccesary items.\n The Merchant: Go up and finish the other levels first, and collect the items!')
 
