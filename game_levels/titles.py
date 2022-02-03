@@ -9,6 +9,24 @@ class il_levels:
         # opening title
         print(title)
 
+    def show_forest(self):
+        forestFile = self.txt_dir + "forest_title.txt"
+        title = open(forestFile, 'r').read()
+        print(title)
+
+    def show_market(self):
+        forestFile = self.txt_dir + "market_title.txt"
+        title = open(forestFile, 'r').read()
+        print(title)
+
+    def show_village(self):
+        forestFile = self.txt_dir + "village_title.txt"
+        title = open(forestFile, 'r').read()
+        print(title)
+
     def end_screen(self):
-        print("Programing terminating...")
-        print("Thank you for playing!")
+        print("\nPrograming terminating...\n")
+        endFile = self.txt_dir + "game_ended.txt"
+        print(endFile)
+        
+        print("\nThank you for playing!\n")

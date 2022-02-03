@@ -4,7 +4,7 @@
  \_ |   to Illume                |.
     |                            |.
     |   Enter the forest,        |.
-    |    find the five keys,     |.
+    |    find the three keys,    |.
     |   solve the final puzzle,  |.
     |     and make your way      |.
     |              back home.    |.
@@ -16,4 +16,3 @@
 Type in the action you want to perform and press "Enter" to execute. 
 
 Level specific commands will be given within the levels themselves. 
-As of today [28/12/2021] only one level is available to experiment with. Type in "go north" to access. 

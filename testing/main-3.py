@@ -237,7 +237,7 @@ while game_ended == False:
                                         
                                         while playerWins != 5:
                                             playerChoice = input("Enter your choice (Rock, Paper or Scissors): ").lower()
-                                            triChoice = random.choice(rps)
+                                            triChoice = rps[random.randint(0, 2)]
                                             
                                             if playerChoice == triChoice:
                                                 print("\nDraw! \n")
