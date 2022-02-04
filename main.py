@@ -7,8 +7,8 @@ import random
 
 # global variables 
 playerInv = {'items':[], 'keys':0}
-print("You wake up in a forest with four paths in four directions - North, South, East, and Down.\n In front of you is a gate with a scroll attached to its side. \n \n What do you do now?")
-print("\n Commands: \n use [itemname] \n go [direction] \n Type in 'look around' to search the area \n Type in 'END GAME' to end the game. \n")
+print("You wake up in a forest with four paths in four directions - North, South, East, and Down. \nIn front of you is a gate with a scroll attached to its side. \n \n What do you do now?")
+print("\n Commands: \n open inventory \n use [itemname] \n go [direction] \n Once you enter a level, to return to the forest, type go [the direction cardinally opposite]. \n Type in 'look around' to search the area \n Type in 'END GAME' to end the game. \n")
 
 playerInput = ""
 gateReq = 3
@@ -112,8 +112,9 @@ while game_ended == False:
                 if prefix == 'go':
                     if suffix in paths['forest']:
                         if suffix == 'north':
-                            print("The Path is blocked by a gate. (Hint: Collect keys to open the gate!)")
+                            print("The Path is blocked by a gate. (Hint: Collect the 3 keys to open the gate by finishing the levels, and if you've collected the keys, type open gate!)")
                         if suffix == 'south':
+                            print('Welcome to the south! Try using commands like \'look around\' or \'talk\'')
                             currentLevel = 'south'
                             continue
 
@@ -122,10 +123,12 @@ while game_ended == False:
                             continue
 
                         if suffix == 'down':
+                            print('Welcome to the Underground! Try using commands like \'talk\'')
                             currentLevel = 'down'
                             continue
 
                         if suffix == 'east':
+                            print('Welcome to the east! Try using commands like \'look around\' or \'talk\'')
                             currentLevel = 'east'
                             enteredEast = True
                             continue
@@ -172,7 +175,8 @@ while game_ended == False:
                 if playerInput == 'look around':
                     print("\n You see: ")
                     for item in level_items.keys():
-                        print(item.title())
+                        print(item.title(), end=': ')
+                        print(items['forest'][item])
                     print("\nYou also see paths: \n")
                     for item in paths['forest']:
                         print(item.title())
@@ -295,6 +299,7 @@ while game_ended == False:
                                                 print("\nTrickster: Fair enough. Have the key.\n")
                                                 print("A key has been added to your inventory!\n")
                                                 rpsWon = True
+                                                paths['forest'].pop(paths['forest'].index('east'))
                                                 break
                                             
                                             if triWins == 5:
@@ -396,7 +401,7 @@ while game_ended == False:
                                     break
                                 else:
                                     print('Are you sure about that? Try again.')
-                            print('{c}: Thank you for all your help! However please take this.\n'.format(c='Cheifton'))
+                            print('{c}: Thank you for all your help!'.format(c='Cheifton'))
                             time.sleep(1.5)
                             playerInv['items'].append('g_key')
                             print("{c}: I do not actually have either of the keys.".format(c="Chiefton"))
@@ -406,7 +411,7 @@ while game_ended == False:
                             print("{c}: Go to the forest and then go down, when you get there give the merchant the items you have as well as the Golden Key.".format(c="Chiefton"))
                             time.sleep(2.5)
                             print("{c}: In return, he will give you the final 2 keys, and you can make your way to freedom.\n{c}: Now type go north, to return to the forest.".format(c="Chiefton"))
-                            paths['forest'].pop(1)
+                            paths['forest'].pop(paths['forest'].index('south'))
                             break
                         
                         elif ans == 'no':
@@ -437,6 +442,7 @@ while game_ended == False:
                 playerInv['keys']+=2
                 print('The Merchant: Now go up, and return to the forest. Then go north and complete the game!')
                 playerInv['items'].clear()
+                paths['forest'].pop(paths['forest'].index('down'))
             else:
                 print('\nThe Merchant: You do not have the neccesary items.\n The Merchant: Go up and finish the other levels first, and collect the items!')
 
@@ -462,6 +468,5 @@ while game_ended == False:
             continue
             
     else:
-        
         il_levels.end_screen()
         break
