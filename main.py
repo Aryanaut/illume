@@ -1,3 +1,4 @@
+# Importing ASCII art titles from the repository
 from game_levels.titles import il_levels
 
 il_levels = il_levels()
@@ -5,14 +6,14 @@ il_levels.show_title()
 import time
 import random
 
-# global variables 
-playerInv = {'items':[], 'keys':0}
+# Global variables 
+playerInv = {'items':[], 'keys':0} # initialising inventory of the player
 print("You wake up in a forest with four paths in four directions - North, South, East, and Down. \nIn front of you is a gate with a scroll attached to its side. \n \n What do you do now?")
 print("\n Commands: \n open inventory \n use [itemname] \n go [direction] \n Once you enter a level, to return to the forest, type go [the direction cardinally opposite]. \n Type in 'look around' to search the area \n Type in 'END GAME' to end the game. \n")
 
-playerInput = ""
-gateReq = 3
-currentLevel = 'forest'
+playerInput = "" # Creates an empty string for the player's input
+gateReq = 3 # Initialises the variable that checks if the number of keys is correct
+currentLevel = 'forest' # Starts the game off at the forest level
 
 enteredForest = True
 enteredEast = False
@@ -20,28 +21,29 @@ enteredSouth = False
 enteredDown = False
 enteredNorth = False
 
-'''
-Format for items:
-items = {level_name:{itemname:[list of commands for the item]}}
-'''
+# Establishes the items available in each level and the commands that can be used with each item
 items = {'forest':{'scroll': ['use', 'drop', 'pickup'], 'gate': ['open'], 'scissors':['pickup']}, 
         'east':{'trickster':['talk', 'play']}}
 
+# Establishes the commands that can be used in each level
 commands  = {'forest':['look', 'go', 'pickup', 'drop', 'use', 'open'],
             'east':['look', 'go', 'pickup', 'drop', 'give'],
             'down':['go', 'look'],
             'south':['look', 'go', 'talk', 'help']}
 
+# Establishes the directions the player can travel in each level
 paths = {'forest':['north', 'south', 'east', 'down'], 'east':['west'], 'down':['up'], 'south':['north'], 'north':['south']}
 
+# List of error messages whenever a user enters something the game doesn't recognize
 errorMsg = {'directionError':'You cannot go that way in this room', 
             'unrecognizedCommand':'The game does not recognize this command.',
             'actionNotForItem':'This action cannot be performed on this item.',
             'commandLVLunavailable':'This action cannot be performed in this level.'}
 
+# Adding debug commands for the developers
 debugging_commands = {'debugadd':'debugadd [itemname]', 'debugremove':'debugremove [itemname]'}
-currentLevel = 'forest'
 
+# Feedback messages are printed whenever the player does certain actions.
 def msgs(item, msgType):
     switcher = {
         'dropitem':'You have dropped the '+item,
@@ -52,20 +54,21 @@ def msgs(item, msgType):
     }
     print(switcher.get(msgType))
 
-rps = ['rock', 'paper', 'scissors']
-rpsWin = {'rock':'paper', 'paper':'scissors', 'scissors':'rock'}
-finalItemList=['rock', 'paper', 'scissors', 'g_key']
+rps = ['rock', 'paper', 'scissors'] # Creates the items used in one of the mini-games
+finalItemList=['rock', 'paper', 'scissors', 'g_key'] # Creates a list of items required for the underground market puzzle. 
 
 game_ended = False
 while game_ended == False:
 
-    playerInput = input(">>> ").lower()
+    playerInput = input(">>> ").lower() # Player input is taken
 
-    if playerInput != "end game":
+    if playerInput != "end game": # checks if the player wants to end the game
         
-        if len(playerInput.split()) > 1:
-            prefix = playerInput.split()[0]
-            suffix = playerInput.split()[1]
+        # The following conditions are active in all levels
+        
+        if len(playerInput.split()) > 1: # splits the player input into a prefix and a suffix
+            prefix = playerInput.split()[0] # The prefix acts as the command 
+            suffix = playerInput.split()[1] # The suffix acts as the item on which the command acts
         else:
             prefix = playerInput.split()[0]
             
@@ -76,7 +79,7 @@ while game_ended == False:
             print()
             continue
 
-# debugging code
+        # Adding conditions for the developers to debug the game
         if prefix == "debug":
             print("\n Commands available: \n")
             for command in debugging_commands:
@@ -103,16 +106,22 @@ while game_ended == False:
             continue
             
 
-# forest code
+        # Forest Code
+        
         if currentLevel == 'forest':
             
+            # This level is where the game begins and ends. If the player has the required keys, the gate to the North opens and the game ends.
+                
             level_items = items['forest']
             
-            if prefix in commands['forest'] or prefix in debugging_commands.keys():
-                if prefix == 'go':
-                    if suffix in paths['forest']:
+            if prefix in commands['forest'] or prefix in debugging_commands.keys(): # Checks if commands are available for use in this level
+                
+                if prefix == 'go': # Conditions for the go function
+                    if suffix in paths['forest']: # Checks if the path can be travelled in this level
+                        
                         if suffix == 'north':
                             print("The Path is blocked by a gate. (Hint: Collect the 3 keys to open the gate by finishing the levels, and if you've collected the keys, type open gate!)")
+                        
                         if suffix == 'south':
                             print('Welcome to the south! Try using commands like \'look around\' or \'talk\'')
                             currentLevel = 'south'
@@ -138,8 +147,9 @@ while game_ended == False:
 
                     continue
 
-                if prefix == 'use':
-                    if suffix in level_items.keys():
+                if prefix == 'use': # Conditions for the use function
+                        
+                    if suffix in level_items.keys(): 
                         if suffix in playerInv['items']:
                             msgs(suffix, 'usedItem')
                             if prefix in level_items[suffix]:
@@ -150,7 +160,7 @@ while game_ended == False:
                         else:
                             msgs(suffix, 'itemOutInv')
 
-                if prefix == 'pickup':
+                if prefix == 'pickup': # Conditons for the pickup function
                     if 'pickup' in level_items[suffix]:
                         itemInInv = suffix in playerInv['items']
                         if itemInInv == True:
@@ -161,7 +171,7 @@ while game_ended == False:
                     else:
                         print(errorMsg['actionNotForItem'])
                 
-                if prefix == 'drop':
+                if prefix == 'drop': # Conditions for the drop function
                     if 'drop' in level_items[suffix]:
                         itemInInv = suffix in playerInv['items']
                         if itemInInv == True:
@@ -172,7 +182,7 @@ while game_ended == False:
                     else:
                         print(errorMsg['actionNotForItem'])
                         
-                if playerInput == 'look around':
+                if playerInput == 'look around': # Condition for the look around function
                     print("\n You see: ")
                     for item in level_items.keys():
                         print(item.title(), end=': ')
@@ -182,26 +192,29 @@ while game_ended == False:
                         print(item.title())
                     print("Use the go (usage: go [direction]) command to travel these paths.\n")
                 
-                if prefix == 'open':
-                    if suffix == 'gate':
-                        if playerInv['keys'] != gateReq:
+                if prefix == 'open': # Condition for the open function
+                    
+                    if suffix == 'gate': # If the user tries to open the gate:
+                        if playerInv['keys'] != gateReq: # Checks if the player has the required items to open the gate
                             print("The gate requires", gateReq, "keys to open.")
                         else:
                             print("The gate opens, and you walk through. You've made it home. Congratulations, player.")
                             il_levels.end_screen()
-                            break
+                            break # Game ends
                     else:
                         print(errorMsg['unrecognizedCommand'])
             else:
                 print(errorMsg['commandLVLunavailable'])
     
-# east code
+        # East code
         if currentLevel == 'east':
+                
+            # This level has an old trickster playing a game with the player. If the player wins, the player earns a key.
 
             level_items = items['east']
             rpsWon = False
 
-            if prefix == 'go':
+            if prefix == 'go': # Condition for the go function
                 if suffix in paths['east']:
                     if suffix == 'west':
                         print('Welcome back to the forest!')
@@ -210,15 +223,16 @@ while game_ended == False:
                 else:
                     print(errorMsg['directionError'])
             
-            if playerInput == 'talk':
+            if playerInput == 'talk': # Condition for the talk function
+                        
                 print("\n Area: Trickster's lair \n")
                 print("What do you do now? [type in 'help' to see options] \n")
                 print("\n To? \n - The old hooded man [type in 'trickster'] \n Type in 'Exit' to cancel action.\n" )
                 playerInput = input(">>> ").lower()
 
-                if playerInput == 'trickster':
+                if playerInput == 'trickster': 
 
-                    if rpsWon == False:
+                    if rpsWon == False: # Checks if the mini-game has been won
 
                         print("\n Trickster: Greetings wanderer!")
                         print("\n Choose your response: \n [1] Say hello \n [2] Look around\n")
@@ -238,9 +252,10 @@ while game_ended == False:
                                         triWins = 0
                                         print("\n Trickster: Game's simple. Rock beats Scissors, Scissors cuts Paper, Paper covers rock. First to five points wins. Winner takes key. \n")
                                         
+                                        # Starts the Rock-Paper-Scissors minigame 
                                         while playerWins != 5:
                                             playerChoice = input("Enter your choice (Rock, Paper or Scissors): ").lower()
-                                            triChoice = random.choice(rps)
+                                            triChoice = random.choice(rps) # Trickster's choice
                                             
                                             if playerChoice == triChoice:
                                                 print("\nDraw! \n")
@@ -287,7 +302,7 @@ while game_ended == False:
                                                     print("Trickster's score: ", triWins)
                                                     print()
 
-                                            play_again = input("Play again? (y/n): ").lower()
+                                            play_again = input("Play again? (y/n): ").lower() # Asks if the player wants to play again
 
                                             if playerWins == 5:
                                                 print("\nPlayer wins!\n")
@@ -330,27 +345,30 @@ while game_ended == False:
                             print("\n From the old man's cloak, a key dangles. \n")
                             continue
 
-                    if rpsWon == True:
+                    if rpsWon == True: # When the player wins Rock-Paper-Scissors
                         print("\nTrickster: Good job on the win, traveller. I don't have much else to say to you.\n")
                         continue
 
-                if playerInput == 'exit':
+                if playerInput == 'exit': # If the player wants to stop the conversation
                     print("\n Action cancelled. \n")
 
                 else:
                     print(errorMsg['unrecognizedCommand'])
 
             if playerInput == 'help':
-                print("\nTalk to the old man and see what happens. \n")
+                print("\nTalk to the old man and see what happens. \n") # Hint
 
                 continue
 
             if playerInput == 'look around':
-                print("\nYou see an old hooded man seated next to a desk. On the desk are two rocks, two papers and a pair of scissors. \n")
+                print("\nYou see an old hooded man seated next to a desk. On the desk are two rocks, two papers and a pair of scissors. \n") # Hint
                 continue
             
-# south code
+        # South code
         if currentLevel == 'south':
+                
+            # This level gives the player the chance to earn items required to earn the keys in the underground level. The player must solve a few simple questions
+            # asked by the villagers of the south.
 
             if prefix in commands['south']:
                 if prefix == 'go':
@@ -425,9 +443,11 @@ while game_ended == False:
             else:
                 print(errorMsg['commandLVLunavailable'])
 
-# down code
+        # Down code
         if currentLevel == 'down':
-
+                
+            # This level checks if the player has enough items to earn the final keys
+        
             print('\n{m}: Welcome to the underground market, I am the merchant.\n{m}: The Cheifton says you have items you would like to trade in exchange for the south and the west keys.\n{m}: Alright, let me examine the items.\n'.format(m='The Merchant'))
             boolean=False
             for i in finalItemList:
@@ -469,4 +489,4 @@ while game_ended == False:
             
     else:
         il_levels.end_screen()
-        break
+        break # Game ends
